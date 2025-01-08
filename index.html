@@ -111,49 +111,30 @@
       animation: spin 15s linear infinite;
     }
     
-    /* Turn each "line" into a concentric circle */
     .lines {
-      position: absolute;
-      width: 700px;          
-      height: 700px;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;  
+        position: absolute;
+        width: 100%;
+        height: 100%;
     }
-    
-    .line {
-      position: absolute;
-      width: 700px;
-      height: 700px;
-      top: 0;
-      left: 0;
-      border: 1px solid rgba(0, 255, 204, 0.1);
-      border-radius: 50%;
-      transform-origin: center;
-      animation: none;      
-    }
-    
-    /* Create smaller/larger rings by scaling each circle */
-    .line:nth-child(1) { transform: scale(1);    }
-    .line:nth-child(2) { transform: scale(0.85); }
-    .line:nth-child(3) { transform: scale(0.7);  }
-    .line:nth-child(4) { transform: scale(0.55); }
-    .line:nth-child(5) { transform: scale(0.4);  }
-    .line:nth-child(6) { transform: scale(0.25); }
 
+    .line {
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        background: rgba(0, 255, 204, 0.1);
+        transform-origin: center;
+    }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
     }
-    /* Programmatically rotate lines */
-    .line:nth-child(1) { transform: rotate(0deg); }
-    .line:nth-child(2) { transform: rotate(30deg); }
-    .line:nth-child(3) { transform: rotate(60deg); }
-    .line:nth-child(4) { transform: rotate(90deg); }
-    .line:nth-child(5) { transform: rotate(120deg); }
-    .line:nth-child(6) { transform: rotate(150deg); }
+
+
 
     /* HERO CONTENT */
     .content {
