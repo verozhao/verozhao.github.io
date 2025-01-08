@@ -291,6 +291,14 @@
         display: none; /* hide links entirely on small screens */
       }
     }
+     /* Generate lines programmatically */
+    .line:nth-child(1) { transform: rotate(0deg); }
+    .line:nth-child(2) { transform: rotate(30deg); }
+    .line:nth-child(3) { transform: rotate(60deg); }
+    .line:nth-child(4) { transform: rotate(90deg); }
+    .line:nth-child(5) { transform: rotate(120deg); }
+    .line:nth-child(6) { transform: rotate(150deg); }
+
   </style>
 </head>
 <body>
@@ -322,8 +330,10 @@
     <div class="container">
       <div class="content">
         <h3 class="name">Hi, I'm Veronica Zhao</h3>
-        <h1 class="title">AI/ML Engineer</h1>
-        <h2 class="subtitle">Data Scientist</h2>
+        <h1 class="title">Data Scientist</h1>
+        <h2 class="subtitle">AI/ML Engineer</h2>
+        <h1 class="title">Software Development Engineer</h1>
+        <div class="spinning-line"></div>
         <p class="bio">
           NYU Computer Science and Data Science student with extensive experience 
           in machine learning, deep learning, and AI research. Currently developing 
