@@ -1,378 +1,435 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veronica Zhao - AI/ML Engineer</title>
-    <style>
-        :root {
-            --primary: #00ffcc;
-            --background: #0a192f;
-            --text: #e6f1ff;
-            --text-secondary: #8892b0;
-            --nav-bg: rgba(10, 25, 47, 0.9);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Veronica Zhao - AI/ML Engineer</title>
+  <style>
+    :root {
+      --primary: #00ffcc;
+      --background: #0a192f;
+      --text: #e6f1ff;
+      --text-secondary: #8892b0;
+      --nav-bg: rgba(10, 25, 47, 0.9);
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        html {
-            scroll-behavior: smooth;
-        }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        body {
-            font-family: -apple-system, system-ui, sans-serif;
-            background: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    body {
+      font-family: -apple-system, system-ui, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--nav-bg);
-            padding: 1.5rem;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
+    /* NAVIGATION */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--nav-bg);
+      padding: 1rem 2rem;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+    nav ul {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      list-style: none;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 2rem;
+    }
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: var(--primary);
+    }
 
-        nav ul {
-            display: flex;
-            justify-content: flex-end;
-            list-style: none;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            gap: 3rem;
-        }
+    /* HERO SECTION */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding-top: 70px; /* to avoid nav overlap */
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
 
-        nav a {
-            color: var(--text);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+    /* SPINNING CIRCLE BACKGROUND */
+    .spinning-circle {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+    }
+    .circle-outer,
+    .circle,
+    .circle-inner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(0, 255, 204, 0.1);
+      border-radius: 50%;
+    }
+    .circle-outer {
+      animation: spin 25s linear infinite;
+    }
+    .circle {
+      width: 90%;
+      height: 90%;
+      top: 5%;
+      left: 5%;
+      animation: spin 20s linear infinite reverse;
+    }
+    .circle-inner {
+      width: 80%;
+      height: 80%;
+      top: 10%;
+      left: 10%;
+      animation: spin 15s linear infinite;
+    }
+    .lines {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    .line {
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background: rgba(0, 255, 204, 0.1);
+      transform-origin: center;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Programmatically rotate lines */
+    .line:nth-child(1) { transform: rotate(0deg); }
+    .line:nth-child(2) { transform: rotate(30deg); }
+    .line:nth-child(3) { transform: rotate(60deg); }
+    .line:nth-child(4) { transform: rotate(90deg); }
+    .line:nth-child(5) { transform: rotate(120deg); }
+    .line:nth-child(6) { transform: rotate(150deg); }
 
-        nav a:hover {
-            color: var(--primary);
-        }
+    /* HERO CONTENT */
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+    .name {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    .title {
+      font-size: 4.5rem;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .subtitle {
+      font-size: 3.5rem;
+      color: var(--text-secondary);
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+    .bio {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 3rem;
+    }
 
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding-top: 80px;
-        }
+    /* SOCIAL LINKS */
+    .social-links {
+      position: fixed;
+      bottom: 0;
+      left: 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding-bottom: 2rem;
+      transition: opacity 0.3s ease;
+    }
+    .social-links::after {
+      content: '';
+      width: 1px;
+      height: 100px;
+      background: var(--text-secondary);
+      margin: 0 auto;
+    }
+    .social-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .social-links a:hover {
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
 
-        .content {
-            z-index: 2;
-            text-align: left;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+    /* SECTION STYLES */
+    section {
+      min-height: 100vh;
+      padding: 100px 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .section-title {
+      font-size: 2rem;
+      color: var(--text);
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-title span {
+      color: var(--primary);
+    }
 
-        .name {
-            color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
+    /* EXPERIENCE CARDS */
+    .experience-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .experience-card:hover {
+      transform: translateY(-5px);
+    }
+    .experience-title {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .experience-company {
+      color: var(--text);
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .experience-date {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .experience-list {
+      list-style: none;
+      padding-left: 1.5rem;
+    }
+    .experience-list li {
+      position: relative;
+      margin-bottom: 0.8rem;
+    }
+    .experience-list li::before {
+      content: "▹";
+      color: var(--primary);
+      position: absolute;
+      left: -1.5rem;
+    }
 
-        .title {
-            font-size: 4.5rem;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-        }
-
-        .subtitle {
-            font-size: 3.5rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        .bio {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin-bottom: 3rem;
-        }
-
-        /* Background Pattern */
-        .radial-background {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 800px;
-            height: 800px;
-            z-index: 1;
-        }
-
-        .line {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, 
-                                     rgba(0, 255, 204, 0) 0%,
-                                     rgba(0, 255, 204, 0.1) 50%,
-                                     rgba(0, 255, 204, 0) 100%);
-            transform-origin: center;
-        }
-
-        /* Social Links */
-        .social-links {
-            position: fixed;
-            left: 4rem;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            padding-bottom: 2rem;
-            z-index: 10;
-        }
-
-        .social-links::after {
-            content: '';
-            width: 1px;
-            height: 100px;
-            background: var(--text-secondary);
-            margin: 1.5rem auto 0;
-        }
-
-        .social-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .social-links a:hover {
-            color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        /* Scroll Down */
-        .scroll-down {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--primary);
-            font-size: 2rem;
-            cursor: pointer;
-            animation: bounce 2s infinite;
-            z-index: 10;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translate(-50%, 0);
-            }
-            40% {
-                transform: translate(-50%, -20px);
-            }
-            60% {
-                transform: translate(-50%, -10px);
-            }
-        }
-
-        /* Content Sections */
-        section {
-            min-height: 100vh;
-            padding: 100px 0;
-        }
-
-        .section-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            color: var(--text);
-            margin-bottom: 3rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .section-title span {
-            color: var(--primary);
-        }
-
-        .experience-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .experience-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .experience-title {
-            color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .experience-company {
-            color: var(--text);
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .experience-date {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .experience-list {
-            list-style: none;
-            padding-left: 1.5rem;
-        }
-
-        .experience-list li {
-            position: relative;
-            margin-bottom: 0.8rem;
-        }
-
-        .experience-list li::before {
-            content: "▹";
-            color: var(--primary);
-            position: absolute;
-            left: -1.5rem;
-        }
-
-        /* Media Queries */
-        @media (max-width: 768px) {
-            .social-links {
-                display: none;
-            }
-            
-            .title {
-                font-size: 3rem;
-            }
-            
-            .subtitle {
-                font-size: 2.5rem;
-            }
-
-            nav ul {
-                gap: 1.5rem;
-            }
-        }
-    </style>
+    /* MEDIA QUERIES */
+    @media (max-width: 768px) {
+      .title { font-size: 3rem; }
+      .subtitle { font-size: 2.5rem; }
+      .spinning-circle {
+        width: 400px;
+        height: 400px;
+      }
+      .social-links {
+        display: none; /* hide links entirely on small screens */
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+  <!-- NAV -->
+  <nav>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-    <div class="hero">
-        <div class="radial-background" id="radialLines"></div>
-        
-        <div class="content">
-            <h3 class="name">Hi, I'm Veronica Zhao</h3>
-            <h1 class="title">AI/ML Engineer</h1>
-            <h2 class="subtitle">Data Scientist</h2>
-            <p class="bio">
-                NYU Computer Science and Data Science student with extensive 
-                experience in machine learning, deep learning, and AI research. 
-                Currently focused on developing innovative ML solutions at Google 
-                and NYU Langone Health.
-            </p>
-        </div>
-
-        <div class="social-links">
-            <a href="https://github.com/verozhao" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://linkedin.com/in/verozhao" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        </div>
-
-        <div class="scroll-down" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">↓</div>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="spinning-circle">
+      <div class="circle-outer"></div>
+      <div class="circle"></div>
+      <div class="circle-inner"></div>
+      <div class="lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
     </div>
+    <div class="container">
+      <div class="content">
+        <h3 class="name">Hi, I'm Veronica Zhao</h3>
+        <h1 class="title">AI/ML Engineer</h1>
+        <h2 class="subtitle">Data Scientist</h2>
+        <p class="bio">
+          NYU Computer Science and Data Science student with extensive experience 
+          in machine learning, deep learning, and AI research. Currently developing 
+          innovative ML solutions at Google and NYU Langone Health.
+        </p>
+      </div>
+    </div>
+    <div class="social-links">
+      <a href="https://github.com/verozhao" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://linkedin.com/in/verozhao" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </div>
 
-    <section id="about">
-        <!-- About section content -->
-    </section>
+  <!-- ABOUT SECTION -->
+  <section id="about">
+    <h2 class="section-title"><span>01.</span> About</h2>
+    <p>
+      Currently pursuing Computer Science and Data Science at NYU, focusing on advanced 
+      deep learning and AI-driven solutions. Passionate about bridging cutting-edge 
+      research with real-world applications.
+    </p>
+  </section>
 
-    <section id="experience">
-        <div class="section-container">
-            <h2 class="section-title"><span>02.</span>Experience</h2>
-            
-            <!-- Google -->
-            <div class="experience-card">
-                <h3 class="experience-title">AI Studio Fellow</h3>
-                <div class="experience-company">Google</div>
-                <div class="experience-date">August 2024 - December 2024</div>
-                <ul class="experience-list">
-                    <li>Led development of dual-input predictive ML model trained on 27,000+ videos</li>
-                    <li>Designed adaptive two-stage cascade prediction pipeline reducing MAE by 30%</li>
-                    <li>Developed multimodal temporal-semantic feature extraction framework (R² = 0.97)</li>
-                    <li>Engineered scale-invariant prediction system for 100K to 500M views</li>
-                </ul>
-            </div>
+  <!-- EXPERIENCE SECTION -->
+  <section id="experience">
+    <h2 class="section-title"><span>02.</span> Experience</h2>
+    <!-- Google -->
+    <div class="experience-card">
+      <h3 class="experience-title">AI Studio Fellow</h3>
+      <div class="experience-company">Google</div>
+      <div class="experience-date">August 2024 - December 2024</div>
+      <ul class="experience-list">
+        <li>Led development of dual-input predictive ML model trained on 27,000+ videos</li>
+        <li>Designed adaptive two-stage cascade pipeline reducing MAE by 30%</li>
+        <li>Developed multimodal temporal-semantic feature extraction framework (R² = 0.97)</li>
+        <li>Engineered scale-invariant prediction system for 100K to 500M views</li>
+      </ul>
+    </div>
+    <!-- NYU Langone -->
+    <div class="experience-card">
+      <h3 class="experience-title">Data Science Research Assistant</h3>
+      <div class="experience-company">NYU Langone Health</div>
+      <div class="experience-date">June 2023 - December 2024</div>
+      <ul class="experience-list">
+        <li>Processed 15 years of patient data using Python, R, and SPSS</li>
+        <li>Improved respiratory disease prediction models to 97% accuracy</li>
+        <li>Co-authored paper accepted by 2024 MLHC Conference</li>
+      </ul>
+    </div>
+    <!-- Huajun Technology -->
+    <div class="experience-card">
+      <h3 class="experience-title">Software Development Intern</h3>
+      <div class="experience-company">Huajun Technology Co., Ltd</div>
+      <div class="experience-date">July 2024 - September 2024</div>
+      <ul class="experience-list">
+        <li>Developed distributed file storage system with 95% uptime</li>
+        <li>Enhanced web server architecture increasing capacity by 400%</li>
+        <li>Built CRM platform managing 500+ clients and $10M+ transactions</li>
+      </ul>
+    </div>
+    <!-- Wanhua -->
+    <div class="experience-card">
+      <h3 class="experience-title">Machine Learning Intern</h3>
+      <div class="experience-company">Wanhua Chemical Group</div>
+      <div class="experience-date">May 2023 - July 2023</div>
+      <ul class="experience-list">
+        <li>Optimized real-time production line anomaly detection with a custom CNN</li>
+        <li>Reduced detection latency by 40% and improved recall by 20%</li>
+        <li>Performed large-scale data cleaning for sensor-based predictive maintenance</li>
+      </ul>
+    </div>
+    <!-- CITIC Bank -->
+    <div class="experience-card">
+      <h3 class="experience-title">Data Engineer Intern</h3>
+      <div class="experience-company">CITIC Bank</div>
+      <div class="experience-date">Jan 2023 - Apr 2023</div>
+      <ul class="experience-list">
+        <li>Consolidated 5 million+ financial transactions to build real-time analytics dashboards</li>
+        <li>Introduced multi-node ETL pipelines using Spark, reducing data processing time by 50%</li>
+        <li>Assisted in implementing fraud detection algorithms for credit risk management</li>
+      </ul>
+    </div>
+  </section>
 
-            <!-- NYU Langone -->
-            <div class="experience-card">
-                <h3 class="experience-title">Data Science Research Assistant</h3>
-                <div class="experience-company">NYU Langone Health</div>
-                <div class="experience-date">June 2023 - December 2024</div>
-                <ul class="experience-list">
-                    <li>Processed 15 years of patient data using Python, R, and SPSS</li>
-                    <li>Improved respiratory disease prediction models to 97% accuracy</li>
-                    <li>Co-authored paper accepted by 2024 MLHC Conference</li>
-                </ul>
-            </div>
+  <!-- PROJECTS SECTION -->
+  <section id="projects">
+    <h2 class="section-title"><span>03.</span> Projects</h2>
+    <div>
+      <h3 style="color:var(--primary);">Multimodal Video Analysis</h3>
+      <ul class="experience-list">
+        <li>Developed a Transformer-based pipeline for automated video captioning and summary</li>
+        <li>Achieved a 92.4 BLEU score across domain-specific datasets</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:var(--primary);">NLP for Healthcare Records</h3>
+      <ul class="experience-list">
+        <li>Implemented a BERT-based model for disease progression prediction from EMR data</li>
+        <li>Increased F1-score by 15% in multi-class classification tasks</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:var(--primary);">Reinforcement Learning Trading Bot</h3>
+      <ul class="experience-list">
+        <li>Created a Q-learning agent using historical stock price data for automated trading</li>
+        <li>Outperformed baseline strategies by 12% on average annual ROI</li>
+      </ul>
+    </div>
+  </section>
 
-            <!-- Huajun Technology -->
-            <div class="experience-card">
-                <h3 class="experience-title">Software Development Intern</h3>
-                <div class="experience-company">Huajun Technology Co., Ltd</div>
-                <div class="experience-date">July 2024 - September 2024</div>
-                <ul class="experience-list">
-                    <li>Developed distributed file storage system with 95% uptime</li>
-                    <li>Enhanced web server architecture increasing capacity by 400%</li>
-                    <li>Built CRM platform managing 500+ clients and $10M+ transactions</li>
-                </ul>
-            </div>
+  <!-- CONTACT SECTION -->
+  <section id="contact">
+    <h2 class="section-title"><span>04.</span> Contact</h2>
+    <p>
+      Interested in collaborating on cutting-edge AI/ML projects or have opportunities to discuss?
+      Reach out via <a href="mailto:veronica.zhao@nyu.edu" style="color: var(--primary);">email</a>.
+    </p>
+  </section>
 
-            <!-- More cards for Wanhua and CITIC -->
-        </div>
-    </section>
-
-    <script>
-        // Create radial lines
-        const radialContainer = document.getElementById('radialLines');
-        const numberOfLines = 24;
-
-        for (let i = 0; i < numberOfLines; i++) {
-            const line = document.createElement('div');
-            line.className = 'line';
-            line.style.transform = `rotate(${(i * 360) / numberOfLines}deg)`;
-            radialContainer.appendChild(line);
-        }
-    </script>
+  <!-- SCROLL SCRIPT (Hide social links on scroll) -->
+  <script>
+    window.addEventListener("scroll", function() {
+      const social = document.querySelector(".social-links");
+      if (window.scrollY > 50) {
+        social.style.opacity = "0";
+      } else {
+        social.style.opacity = "1";
+      }
+    });
+  </script>
 </body>
 </html>
+```
