@@ -115,7 +115,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        transform: translateY(-80%);  /* Move lines up significantly */
+        top: -45%;  /* Position adjusted to align with top of middle circle */
     }
     
     .line {
@@ -125,10 +125,9 @@
         background: rgba(0, 255, 204, 0.1);
         transform-origin: center;
         left: 0;
-        top: 50%;
     }
     
-    /* Keep lines parallel with original spacing */
+    /* Line rotations maintained */
     .line:nth-child(1) { transform: rotate(0deg); }
     .line:nth-child(2) { transform: rotate(30deg); }
     .line:nth-child(3) { transform: rotate(60deg); }
@@ -140,13 +139,12 @@
         .lines {
             width: 400px;
             height: 400px;
-            transform: translateY(-80%);
+            top: -45%;  /* Maintain consistent positioning on mobile */
         }
         .line {
             width: 400px;
         }
     }
-
     @keyframes spin {
         from {
             transform: rotate(0deg);
