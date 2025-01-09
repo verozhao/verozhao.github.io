@@ -115,14 +115,32 @@
         position: absolute;
         width: 100%;
         height: 100%;
+        /* Add transform to move lines down by 5% of container height */
+        transform: translateY(5%);
     }
-
+    
     .line {
         position: absolute;
         width: 100%;
         height: 1px;
         background: rgba(0, 255, 204, 0.1);
         transform-origin: center;
+        /* Adjust left position to maintain center alignment */
+        left: 0;
+        top: 50%;
+    }
+    
+    /* Media query adjustment for smaller screens */
+    @media (max-width: 768px) {
+        .lines {
+            width: 400px;
+            height: 400px;
+            transform: translateY(5%); /* Maintain consistent offset on mobile */
+        }
+        .line {
+            width: 200px;
+            left: 25%; /* Center the shortened lines on mobile */
+        }
     }
 
     @keyframes spin {
