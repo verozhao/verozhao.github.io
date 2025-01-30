@@ -231,6 +231,45 @@
       transform: translateY(-3px);
     }
 
+    /* PROFILE PHOTO */
+    .profile-container {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      align-items: flex-start;
+    }
+
+    .profile-photo {
+      width: 300px;
+      height: 300px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+      filter: grayscale(20%);
+      transition: all 0.3s ease;
+    }
+
+    .profile-photo:hover {
+      filter: grayscale(0%);
+      transform: translateY(-5px);
+    }
+
+    .profile-text {
+      flex: 1;
+    }
+
+    @media (max-width: 768px) {
+      .profile-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .profile-photo {
+        width: 250px;
+        height: 250px;
+      }
+    }
+
     /* SECTION STYLES */
     section {
       min-height: 100vh;
@@ -383,7 +422,7 @@
       Eager to explore advanced topics in computer science and data science at the graduate level, with aspirations to pursue a PhD in the future. Particularly interested in the intersection of distributed systems, machine learning, and real-time analytics, with a focus on developing solutions to tackle real-world challenges in enterprise environments.
       <br><br>
       🔗 Let's Connect:
-      Feel free to reach out—whether you're interested in collaborating on innovative research or exchanging ideas in tech and academia, I'd love to connect!
+      Feel free to reach out - whether you're interested in collaborating on innovative research or exchanging ideas in tech and academia, I'd love to connect!
     </p>
   </section>
 
