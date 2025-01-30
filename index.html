@@ -74,6 +74,53 @@
       padding: 0 2rem;
     }
 
+    /* PROFILE PHOTO */
+    .profile-container {
+      display: flex;
+      gap: 4rem;
+      margin-bottom: 2rem;
+      align-items: flex-start;
+      flex-direction: row-reverse;  /* This puts the photo on the right */
+    }
+
+    .profile-photo {
+      width: 300px;
+      height: 300px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+      filter: grayscale(20%);
+      transition: all 0.3s ease;
+      flex-shrink: 0;  /* Prevents the image from shrinking */
+    }
+
+    .profile-photo:hover {
+      filter: grayscale(0%);
+      transform: translateY(-5px);
+    }
+
+    .profile-text {
+      flex: 1;
+      max-width: 600px;  /* Controls the width of the text container */
+    }
+
+    @media (max-width: 768px) {
+      .profile-container {
+        flex-direction: column-reverse;  /* Photo will be above text on mobile */
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .profile-photo {
+        width: 250px;
+        height: 250px;
+      }
+
+      .profile-text {
+        max-width: 100%;
+      }
+    }
+
     /* SPINNING CIRCLE BACKGROUND */
     .spinning-circle {
       position: absolute;
@@ -229,45 +276,6 @@
     .social-links a:hover {
       color: var(--primary);
       transform: translateY(-3px);
-    }
-
-    /* PROFILE PHOTO */
-    .profile-container {
-      display: flex;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      align-items: flex-start;
-    }
-
-    .profile-photo {
-      width: 300px;
-      height: 300px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 2px solid var(--primary);
-      filter: grayscale(20%);
-      transition: all 0.3s ease;
-    }
-
-    .profile-photo:hover {
-      filter: grayscale(0%);
-      transform: translateY(-5px);
-    }
-
-    .profile-text {
-      flex: 1;
-    }
-
-    @media (max-width: 768px) {
-      .profile-container {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .profile-photo {
-        width: 250px;
-        height: 250px;
-      }
     }
 
     /* SECTION STYLES */
