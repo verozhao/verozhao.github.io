@@ -4,13 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Veronica Zhao - AI/ML Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #00ffcc;
-      --background: #0a192f;
+      --primary-dark: #00cc99;
+      --secondary: #ff00ff;
+      --accent: #ffff00;
+      --background: #0a0e1a;
+      --background-light: #0f1629;
       --text: #e6f1ff;
       --text-secondary: #8892b0;
-      --nav-bg: rgba(10, 25, 47, 0.9);
+      --nav-bg: rgba(10, 14, 26, 0.85);
+      --card-bg: rgba(15, 22, 41, 0.6);
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #00ffcc 0%, #00cc99 100%);
+      --gradient-3: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     }
 
     * {
@@ -21,14 +32,137 @@
 
     html {
       scroll-behavior: smooth;
+      cursor: none;
     }
 
     body {
-      font-family: -apple-system, system-ui, sans-serif;
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
       background: var(--background);
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Custom Cursor */
+    .cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+      transition: all 0.1s ease;
+      mix-blend-mode: difference;
+    }
+
+    .cursor-follower {
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 255, 204, 0.1);
+      border-radius: 50%;
+      position: fixed;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.3s ease;
+    }
+
+    .cursor.hover {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      opacity: 0.5;
+    }
+
+    /* Loading Screen */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--background);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      animation: fadeOut 0.5s ease forwards;
+      animation-delay: 2s;
+    }
+
+    .loader-inner {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+
+    .loader-circle {
+      position: absolute;
+      border: 3px solid transparent;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loader-circle:nth-child(1) {
+      width: 100px;
+      height: 100px;
+      animation-duration: 0.8s;
+    }
+
+    .loader-circle:nth-child(2) {
+      width: 70px;
+      height: 70px;
+      top: 15px;
+      left: 15px;
+      animation-duration: 1s;
+      border-top-color: var(--secondary);
+    }
+
+    .loader-circle:nth-child(3) {
+      width: 40px;
+      height: 40px;
+      top: 30px;
+      left: 30px;
+      animation-duration: 1.2s;
+      border-top-color: var(--accent);
+    }
+
+    /* Animated Background Gradient */
+    .gradient-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, 
+        rgba(102, 126, 234, 0.05) 0%, 
+        rgba(118, 75, 162, 0.05) 25%, 
+        rgba(0, 255, 204, 0.05) 50%, 
+        rgba(240, 147, 251, 0.05) 75%, 
+        rgba(245, 87, 108, 0.05) 100%);
+      animation: gradientShift 15s ease infinite;
+      z-index: 0;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+    }
+
+    /* Particle Background */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.5;
     }
 
     /* NAVIGATION */
@@ -37,26 +171,70 @@
       top: 0;
       width: 100%;
       background: var(--nav-bg);
-      padding: 1rem 2rem;
+      padding: 1.5rem 3rem;
       z-index: 1000;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 255, 204, 0.1);
+      transform: translateY(0);
+      transition: transform 0.3s ease;
     }
+
+    nav.hidden {
+      transform: translateY(-100%);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--gradient-2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
     nav ul {
       display: flex;
-      justify-content: flex-end;
-      align-items: center;
       list-style: none;
-      max-width: 1200px;
-      margin: 0 auto;
-      gap: 2rem;
+      gap: 3rem;
     }
+
     nav a {
       color: var(--text);
       text-decoration: none;
+      position: relative;
+      font-weight: 500;
       transition: color 0.3s ease;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
     }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-2);
+      transition: width 0.3s ease;
+    }
+
     nav a:hover {
       color: var(--primary);
+    }
+
+    nav a:hover::after {
+      width: 100%;
     }
 
     /* HERO SECTION */
@@ -66,188 +244,338 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      padding-top: 70px; /* to avoid nav overlap */
+      padding-top: 100px;
+      z-index: 2;
     }
+
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 3rem;
+      position: relative;
+      z-index: 3;
     }
 
-    /* PROFILE PHOTO */
-    .profile-container {
-      display: flex;
-      gap: 4rem;
-      margin-bottom: 2rem;
-      align-items: flex-start;
-      flex-direction: row-reverse;  /* This puts the photo on the right */
-    }
-
-    .profile-photo {
-      width: 400px;
-      height: 400px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 2px solid var(--primary);
-      filter: grayscale(10%);
-      transition: all 0.3s ease;
-      flex-shrink: 0;  /* Prevents the image from shrinking */
-    }
-
-    .profile-photo:hover {
-      filter: grayscale(0%);
-      transform: translateY(-5px);
-    }
-
-    .profile-text {
-      flex: 1;
-      max-width: 600px;  /* Controls the width of the text container */
-    }
-
-    @media (max-width: 768px) {
-      .profile-container {
-        flex-direction: column-reverse;  /* Photo will be above text on mobile */
-        align-items: center;
-        gap: 2rem;
-      }
-
-      .profile-photo {
-        width: 300px;
-        height: 300px;
-      }
-
-      .profile-text {
-        max-width: 100%;
-      }
-    }
-
-    /* SPINNING CIRCLE BACKGROUND */
-    .spinning-circle {
+    /* Animated Geometric Shapes */
+    .floating-shapes {
       position: absolute;
-      width: 800px;
-      height: 800px;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--gradient-1);
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .shape-2 {
+      width: 200px;
+      height: 200px;
+      background: var(--gradient-3);
+      border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%;
+      top: 60%;
+      right: 10%;
+      animation-delay: 5s;
+    }
+
+    .shape-3 {
+      width: 150px;
+      height: 150px;
+      background: var(--gradient-2);
+      border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+      bottom: 20%;
+      left: 30%;
+      animation-delay: 10s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      33% {
+        transform: translate(30px, -30px) rotate(120deg);
+      }
+      66% {
+        transform: translate(-20px, 20px) rotate(240deg);
+      }
+    }
+
+    /* Enhanced Spinning Elements */
+    .hero-decoration {
+      position: absolute;
+      width: 600px;
+      height: 600px;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
       z-index: 0;
     }
-    .circle-outer,
-    .circle,
-    .circle-inner {
+
+    .orbit {
       position: absolute;
       width: 100%;
       height: 100%;
       border: 1px solid rgba(0, 255, 204, 0.1);
       border-radius: 50%;
     }
-    .circle-outer {
-      animation: spin 25s linear infinite;
+
+    .orbit-1 {
+      animation: spin 30s linear infinite;
+      box-shadow: 0 0 50px rgba(0, 255, 204, 0.1);
     }
-    .circle {
-      width: 90%;
-      height: 90%;
-      top: 5%;
-      left: 5%;
-      animation: spin 20s linear infinite reverse;
-    }
-    .circle-inner {
+
+    .orbit-2 {
       width: 80%;
       height: 80%;
       top: 10%;
       left: 10%;
-      animation: spin 15s linear infinite;
+      animation: spin 25s linear infinite reverse;
+      border-color: rgba(255, 0, 255, 0.1);
     }
-    
-    .lines {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 5%;  /* Position adjusted to align with top of middle circle */
+
+    .orbit-3 {
+      width: 60%;
+      height: 60%;
+      top: 20%;
+      left: 20%;
+      animation: spin 20s linear infinite;
+      border-color: rgba(255, 255, 0, 0.1);
     }
-    
-    .line {
-        position: absolute;
-        width: 100%;
-        height: 1px;
-        background: rgba(0, 255, 204, 0.1);
-        transform-origin: center;
-        left: 0;
+
+    .orbit-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 20px var(--primary);
     }
-    
-    /* Line rotations maintained */
-    .line:nth-child(1) { transform: rotate(0deg); }
-    .line:nth-child(2) { transform: rotate(30deg); }
-    .line:nth-child(3) { transform: rotate(60deg); }
-    .line:nth-child(4) { transform: rotate(90deg); }
-    .line:nth-child(5) { transform: rotate(120deg); }
-    .line:nth-child(6) { transform: rotate(150deg); }
-    
-    @media (max-width: 768px) {
-        .lines {
-            width: 400px;
-            height: 400px;
-            top: -45%;  /* Maintain consistent positioning on mobile */
-        }
-        .line {
-            width: 400px;
-        }
-    }
+
     @keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
-
-
 
     /* HERO CONTENT */
     .content {
       position: relative;
-      z-index: 1;
-      max-width: 800px;
+      z-index: 10;
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.5s;
+      opacity: 0;
     }
-    .name {
+
+    .glitch-wrapper {
+      display: inline-block;
+      position: relative;
+    }
+
+    .glitch {
       color: var(--primary);
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      font-weight: 400;
-    }
-    .title {
-      font-size: 4.5rem;
-      line-height: 1.1;
-      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
       font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+      font-family: 'Space Grotesk', sans-serif;
     }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .glitch::before {
+      animation: glitch-1 0.5s infinite;
+      color: var(--secondary);
+      z-index: -1;
+    }
+
+    .glitch::after {
+      animation: glitch-2 0.5s infinite;
+      color: var(--accent);
+      z-index: -2;
+    }
+
+    @keyframes glitch-1 {
+      0%, 100% {
+        clip: rect(0, 900px, 0, 0);
+      }
+      25% {
+        clip: rect(20px, 900px, 40px, 0);
+        transform: translate(-2px, -2px);
+      }
+      50% {
+        clip: rect(60px, 900px, 80px, 0);
+        transform: translate(2px, 2px);
+      }
+      75% {
+        clip: rect(100px, 900px, 120px, 0);
+        transform: translate(-2px, 2px);
+      }
+    }
+
+    @keyframes glitch-2 {
+      0%, 100% {
+        clip: rect(0, 900px, 0, 0);
+      }
+      25% {
+        clip: rect(30px, 900px, 50px, 0);
+        transform: translate(2px, 2px);
+      }
+      50% {
+        clip: rect(70px, 900px, 90px, 0);
+        transform: translate(-2px, -2px);
+      }
+      75% {
+        clip: rect(110px, 900px, 130px, 0);
+        transform: translate(2px, -2px);
+      }
+    }
+
+    .title {
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 50%, var(--text) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% auto;
+      animation: shimmer 3s linear infinite;
+    }
+
+    @keyframes shimmer {
+      to {
+        background-position: 200% center;
+      }
+    }
+
     .subtitle {
-      font-size: 3.5rem;
+      font-size: clamp(2.5rem, 6vw, 4rem);
       color: var(--text-secondary);
       line-height: 1.1;
       margin-bottom: 2rem;
-    }
-    .bio {
-      color: var(--text-secondary);
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin-bottom: 3rem;
+      font-weight: 600;
+      opacity: 0.8;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
-    /* Contact Button */
-    .contact-btn {
+    .typing-effect {
       display: inline-block;
-      padding: 1rem 2rem;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      text-decoration: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      transition: all 0.3s ease;
+      border-right: 3px solid var(--primary);
+      animation: blink 1s infinite;
     }
-    .contact-btn:hover {
+
+    @keyframes blink {
+      0%, 50% { border-color: var(--primary); }
+      51%, 100% { border-color: transparent; }
+    }
+
+    .bio {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+      opacity: 0.9;
+    }
+
+    /* Enhanced Buttons */
+    .buttons-group {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      cursor: none;
+    }
+
+    .btn-primary {
+      background: var(--gradient-2);
+      color: var(--background);
+      border: none;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+      z-index: -1;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      position: relative;
+    }
+
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
       background: rgba(0, 255, 204, 0.1);
+      transition: width 0.3s ease;
+      z-index: -1;
+    }
+
+    .btn-secondary:hover::before {
+      width: 100%;
+    }
+
+    .btn-secondary:hover {
       transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 255, 204, 0.3);
     }
 
     /* SOCIAL LINKS */
@@ -259,344 +587,1051 @@
       flex-direction: column;
       gap: 1.5rem;
       padding-bottom: 2rem;
-      transition: opacity 0.3s ease;
+      z-index: 100;
     }
+
     .social-links::after {
       content: '';
-      width: 1px;
+      width: 2px;
       height: 100px;
-      background: var(--text-secondary);
-      margin: 0 auto;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+      margin: 1rem auto 0;
     }
-    .social-links a {
+
+    .social-icon {
+      width: 24px;
+      height: 24px;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      cursor: none;
+    }
+
+    .social-icon:hover {
+      color: var(--primary);
+      transform: translateY(-5px) scale(1.2);
+    }
+
+    /* Email Link */
+    .email-link {
+      position: fixed;
+      bottom: 0;
+      right: 4rem;
+      writing-mode: vertical-rl;
+      padding-bottom: 2rem;
+      z-index: 100;
+    }
+
+    .email-link a {
       color: var(--text-secondary);
       text-decoration: none;
-      transition: color 0.3s ease, transform 0.3s ease;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
     }
-    .social-links a:hover {
+
+    .email-link a:hover {
       color: var(--primary);
-      transform: translateY(-3px);
+      transform: translateY(-5px);
+    }
+
+    .email-link::after {
+      content: '';
+      width: 2px;
+      height: 100px;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+      display: block;
+      margin: 1rem auto 0;
     }
 
     /* SECTION STYLES */
     section {
       min-height: 100vh;
-      padding: 100px 2rem;
-      max-width: 1000px;
+      padding: 120px 3rem;
+      max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+      z-index: 2;
     }
+
     .section-title {
-      font-size: 2rem;
+      font-size: clamp(2rem, 4vw, 3rem);
       color: var(--text);
-      margin-bottom: 3rem;
+      margin-bottom: 4rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 2rem;
+      font-family: 'Space Grotesk', sans-serif;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
     }
+
     .section-title span {
       color: var(--primary);
+      font-size: 1.2rem;
+      font-weight: 600;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--primary), transparent);
+      max-width: 300px;
+    }
+
+    /* ABOUT SECTION */
+    .profile-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .profile-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .profile-text p {
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .profile-photo-container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      justify-self: end;
+    }
+
+    .profile-photo {
+      width: 100%;
+      border-radius: 20px;
+      filter: grayscale(30%);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-photo-container::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 100%;
+      height: 100%;
+      border: 3px solid var(--primary);
+      border-radius: 20px;
+      z-index: 1;
+      transition: all 0.3s ease;
+    }
+
+    .profile-photo:hover {
+      filter: grayscale(0%);
+      transform: translate(-10px, -10px);
+    }
+
+    .profile-photo-container:hover::before {
+      top: 30px;
+      left: 30px;
+    }
+
+    /* Skills Section */
+    .skills-container {
+      margin-top: 3rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    .skills-title {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .skill-tag {
+      background: var(--card-bg);
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      text-align: center;
+      border: 1px solid rgba(0, 255, 204, 0.2);
+      transition: all 0.3s ease;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-tag::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 255, 204, 0.1);
+      transition: left 0.3s ease;
+    }
+
+    .skill-tag:hover::before {
+      left: 0;
+    }
+
+    .skill-tag:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      box-shadow: 0 5px 20px rgba(0, 255, 204, 0.2);
     }
 
     /* EXPERIENCE CARDS */
+    .experience-timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .experience-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+    }
+
     .experience-card {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: transform 0.3s ease;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      border: 1px solid rgba(0, 255, 204, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      animation: slideInLeft 0.8s ease forwards;
     }
+
+    .experience-card:nth-child(odd) {
+      animation-delay: 0.2s;
+    }
+
+    .experience-card:nth-child(even) {
+      animation-delay: 0.4s;
+    }
+
+    .experience-card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: var(--gradient-2);
+      border-radius: 15px;
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.3s ease;
+    }
+
+    .experience-card:hover::before {
+      opacity: 0.1;
+    }
+
     .experience-card:hover {
-      transform: translateY(-5px);
+      transform: translateX(10px);
+      box-shadow: 0 10px 40px rgba(0, 255, 204, 0.1);
     }
+
+    .experience-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
     .experience-title {
-      color: var(--primary);
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .experience-company {
+      font-size: 1.4rem;
       color: var(--text);
-      font-size: 1.2rem;
+      font-weight: 600;
       margin-bottom: 0.5rem;
     }
-    .experience-date {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
+
+    .experience-company {
+      color: var(--primary);
+      font-size: 1.1rem;
+      font-weight: 500;
     }
+
+    .experience-date {
+      background: rgba(0, 255, 204, 0.1);
+      color: var(--primary);
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid var(--primary);
+    }
+
     .experience-list {
       list-style: none;
-      padding-left: 1.5rem;
+      padding-left: 0;
     }
+
     .experience-list li {
       position: relative;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
+      padding-left: 2rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
     }
+
     .experience-list li::before {
       content: "▹";
       color: var(--primary);
       position: absolute;
-      left: -1.5rem;
+      left: 0;
+      font-size: 1.2rem;
     }
 
-    /* MEDIA QUERIES */
+    /* PROJECT CARDS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      border: 1px solid rgba(0, 255, 204, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .project-card:nth-child(1) { animation-delay: 0.1s; }
+    .project-card:nth-child(2) { animation-delay: 0.2s; }
+    .project-card:nth-child(3) { animation-delay: 0.3s; }
+    .project-card:nth-child(4) { animation-delay: 0.4s; }
+    .project-card:nth-child(5) { animation-delay: 0.5s; }
+    .project-card:nth-child(6) { animation-delay: 0.6s; }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 3px;
+      background: var(--gradient-2);
+      transition: left 0.3s ease;
+    }
+
+    .project-card:hover::before {
+      left: 0;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 255, 204, 0.15);
+      border-color: var(--primary);
+    }
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 255, 204, 0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .project-title {
+      font-size: 1.3rem;
+      color: var(--text);
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .project-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .tech-tag {
+      background: rgba(0, 255, 204, 0.1);
+      color: var(--primary);
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 1px solid rgba(0, 255, 204, 0.2);
+    }
+
+    /* CONTACT SECTION */
+    .contact-container {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .contact-title {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      background: var(--gradient-2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .contact-text {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .profile-container {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-photo-container {
+        justify-self: center;
+        margin-bottom: 2rem;
+      }
+    }
+
     @media (max-width: 768px) {
-      .title { font-size: 3rem; }
-      .subtitle { font-size: 2.5rem; }
-      .spinning-circle {
+      html { cursor: auto; }
+      
+      .cursor,
+      .cursor-follower {
+        display: none;
+      }
+
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      nav ul {
+        gap: 1.5rem;
+      }
+
+      .hero-decoration {
         width: 400px;
         height: 400px;
       }
-      .lines {
-        width: 400px;
-        height: 400px;
+
+      .social-links,
+      .email-link {
+        display: none;
       }
-      .line {
-        width: 200px;
+
+      section {
+        padding: 80px 1.5rem;
       }
-      .social-links {
-        display: none; /* hide links entirely on small screens */
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .buttons-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
       }
     }
-     /* Generate lines programmatically */
-    .line:nth-child(1) { transform: rotate(0deg); }
-    .line:nth-child(2) { transform: rotate(30deg); }
-    .line:nth-child(3) { transform: rotate(60deg); }
-    .line:nth-child(4) { transform: rotate(90deg); }
-    .line:nth-child(5) { transform: rotate(120deg); }
-    .line:nth-child(6) { transform: rotate(150deg); }
 
+    /* Hide scrollbar but keep functionality */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--background);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
   </style>
 </head>
 <body>
-  <!-- NAV -->
-  <nav>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="spinning-circle">
-      <div class="circle-outer"></div>
-      <div class="circle"></div>
-      <div class="circle-inner"></div>
-      <div class="lines">
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-        <div class="line"></div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="content">
-        <h3 class="name">Hi, I'm Veronica Zhao</h3>
-        <h1 class="title">Data Scientist</h1>
-        <h2 class="subtitle">Data Analyst</h2>
-        <h1 class="title">AI/ML Engineer</h1>
-        <div class="spinning-line"></div>
-        <p class="bio">
-          CMU MS in AI Engineering graduate student and NYU Computer Science and Data Science undergraduate student with extensive experience 
-          in machine learning, deep learning, and AI research. Previously developed 
-          innovative ML solutions for financial documents at Tetrix, developed innovative ML solutions for disease progression prediction at NYU Langone Health, 
-          and developed innovative ML solutions for video virality at Google AI Studio. Currently actively looking for full-time internships from May 2026 to Aug 2026 
-          and full-time jobs starting from Dec 2026 after I graduate from CMU. Happy to connect - if you are hiring and would like to 
-          schedule a brief call to let me do intros, don't hesitate to email me!
-        </p>
-        <!-- CONTACT BUTTON: Jumps to the #contact section -->
-        <a href="#contact" class="contact-btn">Get In Touch</a>
-      </div>
-    </div>
-    <div class="social-links">
-      <a href="https://github.com/verozhao" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="https://linkedin.com/in/verozhao" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href="mailto:veronicazhao@cmu.edu" target="_blank" rel="noopener noreferrer">Email</a>
+  <!-- Loading Screen -->
+  <div class="loader">
+    <div class="loader-inner">
+      <div class="loader-circle"></div>
+      <div class="loader-circle"></div>
+      <div class="loader-circle"></div>
     </div>
   </div>
 
-  <!-- ABOUT SECTION -->
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+  <div class="cursor-follower"></div>
+
+  <!-- Animated Background -->
+  <div class="gradient-bg"></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <div class="logo">VZ</div>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO Section -->
+  <div class="hero">
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="hero-decoration">
+      <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+      <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
+      <div class="orbit orbit-3"><div class="orbit-dot"></div></div>
+    </div>
+    <div class="container">
+      <div class="content">
+        <div class="glitch-wrapper">
+          <h3 class="glitch" data-text="Hi, I'm Veronica Zhao">Hi, I'm Veronica Zhao</h3>
+        </div>
+        <h1 class="title">Data Scientist</h1>
+        <h2 class="subtitle">& AI/ML Engineer<span class="typing-effect"></span></h2>
+        <p class="bio">
+          Carnegie Mellon MS in AI Engineering student with extensive experience in machine learning, 
+          deep learning, and AI research. Previously developed innovative ML solutions at Tetrix, 
+          NYU Langone Health, and Google AI Studio. Currently seeking Summer 2026 internship opportunities 
+          and full-time positions starting December 2026.
+        </p>
+        <div class="buttons-group">
+          <a href="#contact" class="btn btn-primary">Get In Touch</a>
+          <a href="#projects" class="btn btn-secondary">View My Work</a>
+        </div>
+      </div>
+    </div>
+    <div class="social-links">
+      <a href="https://github.com/verozhao" target="_blank" rel="noopener noreferrer">
+        <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+        </svg>
+      </a>
+      <a href="https://linkedin.com/in/verozhao" target="_blank" rel="noopener noreferrer">
+        <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      </a>
+      <a href="mailto:veronicazhao@cmu.edu" target="_blank" rel="noopener noreferrer">
+        <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Email Link on Right -->
+  <div class="email-link">
+    <a href="mailto:veronicazhao@cmu.edu">veronicazhao@cmu.edu</a>
+  </div>
+
+  <!-- ABOUT Section -->
   <section id="about">
-    <h2 class="section-title"><span>01.</span> About</h2>
+    <h2 class="section-title"><span>01.</span> About Me</h2>
     <div class="profile-container">
-      <img src="headshot.jpg" alt="Veronica Zhao" class="profile-photo">
       <div class="profile-text">
         <p>
-          I'm currently pursuing my Master's degree in Artificial Intelligence Engineering at Carnegie Mellon University with a focus on AI applications, computer vision, and NLP, and I'm interested in Data Scientists or Machine Learning Engineer internships for Summer 2026. 
-          <br><br>
-          I am an aspiring student passionate about advancing my expertise in areas like distributed systems, machine learning, and data engineering through further academic research and internships.
-          <br><br>
-          I am proficient in Python (TensorFlow, PyTorch, Keras, Scikit-Learn, PySpark, LangChain, OpenCV), SQL, Java, JavaScript, R, data visualization tools (Tableau, SPSS), and MATLAB (less proficient comparing to the previous ones). I specialized in machine learning frameworks and data-driven decision-making processes. My industry internships have provided hands-on experience in implementing these technologies at scale.
-          <br><br>
-          I am interested in the intersection of distributed systems, machine learning, and real-time analytics, with a focus on developing solutions to tackle real-world challenges in enterprise environments.
-          <br><br>
-          Feel free to reach out - whether you're interested in collaborating on innovative research or exchanging ideas in tech or academia, I'd love to connect!
+          I'm currently pursuing my <span class="highlight">Master's degree in Artificial Intelligence Engineering</span> at 
+          Carnegie Mellon University with a focus on AI applications, computer vision, and NLP. 
+          I'm actively seeking <span class="highlight">Data Science and Machine Learning Engineer internships</span> for Summer 2026.
         </p>
+        <p>
+          My passion lies in advancing expertise in distributed systems, machine learning, and data engineering 
+          through academic research and industry applications. I've had the privilege of working with 
+          cutting-edge technologies at companies like <span class="highlight">Google AI Studio</span>, 
+          <span class="highlight">Tetrix</span>, and <span class="highlight">NYU Langone Health</span>.
+        </p>
+        <p>
+          I specialize in developing scalable ML solutions that tackle real-world challenges, from 
+          healthcare predictions achieving 97% accuracy to video virality models processing millions 
+          of data points. My work spans the entire ML pipeline - from data processing and feature 
+          engineering to model deployment and optimization.
+        </p>
+        <p>
+          When I'm not coding, you can find me exploring the latest AI research papers, contributing 
+          to open-source projects, or mentoring aspiring data scientists. I believe in the power of 
+          technology to create meaningful impact and am always excited to collaborate on innovative projects.
+        </p>
+        
+        <div class="skills-container">
+          <h3 class="skills-title">Technologies I Work With</h3>
+          <div class="skills-grid">
+            <div class="skill-tag">Python</div>
+            <div class="skill-tag">TensorFlow</div>
+            <div class="skill-tag">PyTorch</div>
+            <div class="skill-tag">Scikit-Learn</div>
+            <div class="skill-tag">PySpark</div>
+            <div class="skill-tag">LangChain</div>
+            <div class="skill-tag">OpenCV</div>
+            <div class="skill-tag">SQL</div>
+            <div class="skill-tag">Java</div>
+            <div class="skill-tag">JavaScript</div>
+            <div class="skill-tag">React</div>
+            <div class="skill-tag">Tableau</div>
+          </div>
+        </div>
+      </div>
+      <div class="profile-photo-container">
+        <img src="headshot.jpg" alt="Veronica Zhao" class="profile-photo">
       </div>
     </div>
   </section>
 
-  <!-- EXPERIENCE SECTION -->
+  <!-- EXPERIENCE Section -->
   <section id="experience">
-    <h2 class="section-title"><span>02.</span> Experience</h2>
-    <!-- Tetrix -->
-    <div class="experience-card">
-      <h3 class="experience-title">AI Engineer Intern</h3>
-      <div class="experience-company">Tetrix</div>
-      <div class="experience-date">May 2025 - Aug 2025</div>
-      <ul class="experience-list">
-        <li>Developed Python-based AI workflows for automated retrieval and processing of financial documents from investment portals</li>
-        <li>Established monitoring tools to detect failures and improve system robustness</li>
-        <li>Contributed to research on cutting-edge LLM applications for financial data analysis and portfolio management</li>
-      </ul>
-    </div>
-    <!-- NYU Langone -->
-    <div class="experience-card">
-      <h3 class="experience-title">Data Science Research Assistant</h3>
-      <div class="experience-company">NYU Langone Health</div>
-      <div class="experience-date">June 2023 - May 2025</div>
-      <ul class="experience-list">
-        <li>Processed 15 years of patient data using Python, R, and SPSS</li>
-        <li>Improved respiratory disease prediction models to 97% accuracy</li>
-        <li>Co-authored paper accepted by 2024 MLHC Conference</li>
-      </ul>
-    </div>
-    <!-- Google -->
-    <div class="experience-card">
-      <h3 class="experience-title">AI Studio Fellow</h3>
-      <div class="experience-company">Google</div>
-      <div class="experience-date">August 2024 - December 2024</div>
-      <ul class="experience-list">
-        <li>Led development of dual-input predictive ML model trained on 27,000+ videos</li>
-        <li>Designed adaptive two-stage cascade pipeline reducing MAE by 30%</li>
-        <li>Developed multimodal temporal-semantic feature extraction framework (R² = 0.97)</li>
-        <li>Engineered scale-invariant prediction system for 100K to 500M views</li>
-      </ul>
-    </div>
-    <!-- Huajun Technology -->
-    <div class="experience-card">
-      <h3 class="experience-title">Software Development Intern</h3>
-      <div class="experience-company">Huajun Technology</div>
-      <div class="experience-date">July 2024 - September 2024</div>
-      <ul class="experience-list">
-        <li>Developed distributed file storage system with 95% uptime</li>
-        <li>Enhanced web server architecture increasing capacity by 400%</li>
-        <li>Built CRM platform managing 500+ clients and $10M+ transactions</li>
-      </ul>
-    </div>
-    <!-- Wanhua -->
-    <div class="experience-card">
-      <h3 class="experience-title">Software Development Intern</h3>
-      <div class="experience-company">Wanhua Chemical Group</div>
-      <div class="experience-date">May 2024 - June 2024</div>
-      <ul class="experience-list">
-        <li>Optimized real-time production line anomaly detection with a custom CNN</li>
-        <li>Reduced detection latency by 40% and improved recall by 20%</li>
-        <li>Performed large-scale data cleaning for sensor-based predictive maintenance</li>
-      </ul>
-    </div>
-    <!-- CITIC Bank -->
-    <div class="experience-card">
-      <h3 class="experience-title">Data Scientist Intern</h3>
-      <div class="experience-company">CITIC Bank</div>
-      <div class="experience-date">January 2022 - June 2022</div>
-      <ul class="experience-list">
-        <li>Consolidated 5 million+ financial transactions to build real-time analytics dashboards</li>
-        <li>Introduced multi-node ETL pipelines using Spark, reducing data processing time by 50%</li>
-        <li>Assisted in implementing fraud detection algorithms for credit risk management</li>
-      </ul>
+    <h2 class="section-title"><span>02.</span> Where I've Worked</h2>
+    <div class="experience-timeline">
+      <!-- Tetrix -->
+      <div class="experience-card">
+        <div class="experience-header">
+          <div>
+            <h3 class="experience-title">AI Engineer Intern</h3>
+            <div class="experience-company">@ Tetrix</div>
+          </div>
+          <span class="experience-date">May 2025 - Aug 2025</span>
+        </div>
+        <ul class="experience-list">
+          <li>Developed Python-based AI workflows for automated retrieval and processing of financial documents from investment portals</li>
+          <li>Established monitoring tools to detect failures and improve system robustness</li>
+          <li>Contributed to research on cutting-edge LLM applications for financial data analysis and portfolio management</li>
+        </ul>
+      </div>
+      
+      <!-- NYU Langone -->
+      <div class="experience-card">
+        <div class="experience-header">
+          <div>
+            <h3 class="experience-title">Data Science Research Assistant</h3>
+            <div class="experience-company">@ NYU Langone Health</div>
+          </div>
+          <span class="experience-date">June 2023 - May 2025</span>
+        </div>
+        <ul class="experience-list">
+          <li>Processed 15 years of patient data using Python, R, and SPSS for respiratory disease research</li>
+          <li>Improved respiratory disease prediction models to 97% accuracy using advanced feature engineering</li>
+          <li>Co-authored paper accepted by 2024 MLHC Conference on disease progression prediction</li>
+        </ul>
+      </div>
+      
+      <!-- Google -->
+      <div class="experience-card">
+        <div class="experience-header">
+          <div>
+            <h3 class="experience-title">AI Studio Fellow</h3>
+            <div class="experience-company">@ Google</div>
+          </div>
+          <span class="experience-date">August 2024 - December 2024</span>
+        </div>
+        <ul class="experience-list">
+          <li>Led development of dual-input predictive ML model trained on 27,000+ videos</li>
+          <li>Designed adaptive two-stage cascade pipeline reducing MAE by 30%</li>
+          <li>Developed multimodal temporal-semantic feature extraction framework (R² = 0.97)</li>
+          <li>Engineered scale-invariant prediction system for 100K to 500M views</li>
+        </ul>
+      </div>
+      
+      <!-- Huajun Technology -->
+      <div class="experience-card">
+        <div class="experience-header">
+          <div>
+            <h3 class="experience-title">Software Development Intern</h3>
+            <div class="experience-company">@ Huajun Technology</div>
+          </div>
+          <span class="experience-date">July 2024 - September 2024</span>
+        </div>
+        <ul class="experience-list">
+          <li>Developed distributed file storage system with 95% uptime using microservices architecture</li>
+          <li>Enhanced web server architecture increasing capacity by 400% through optimization</li>
+          <li>Built CRM platform managing 500+ clients and $10M+ transactions</li>
+        </ul>
+      </div>
     </div>
   </section>
 
+  <!-- PROJECTS Section -->
   <section id="projects">
-      <h2 class="section-title"><span>03.</span> Projects</h2>
-
-      <div class="project-item" style="margin-bottom: 2rem;">
-        <h3 style="color:var(--primary);">Smart Refrigerator Management System</h3>
-        <ul class="experience-list">
-          <li>Developed a Docker-containerized MERN stack application for managing food inventory, tracking expiration dates, and minimizing waste through Al suggestions</li>
-          <li>Built and secured a RESTful Express + MongoDB Atlas API with JWT authentication, role-based access, and express-validator input checks; achieved 60 %+ test coverage with Mocha, Chai, c8</li>
-          <li>Designed a dynamic, responsive React/Tailwind UI with guest-mode logic, hot-reloading, and Framer Motion animations; integrated OpenAI API to generate personalized recipe suggestions based on fridge contents</li>
-          <li>Engineered a real-time notification system using Socket.io for instant updates on food expiration and recipe suggestions, and a logging system using Winston for error tracking and debugging</li>
-          <li>Implemented end-to-end CI/CD pipelines using GitHub Actions, automating tests and production deployment to the DigitalOcean platform</li>
-          <li>Wrote and maintained Docker + Docker Compose configurations for consistent multi-environment deployment (local and cloud), supporting front-end, back-end, and database containers</li>
-          <li>Utilized Agile methodologies for project management and Git for version control and code review</li>
-          <li>Presented the project at a local tech meetup, receiving positive feedback and interest from potential users</li>
-        </ul>
+    <h2 class="section-title"><span>03.</span> Things I've Built</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">🚀</div>
+        </div>
+        <h3 class="project-title">Smart Refrigerator Management</h3>
+        <p class="project-description">
+          Docker-containerized MERN stack application for managing food inventory with AI-powered recipe suggestions. 
+          Implemented real-time notifications using Socket.io and secured RESTful API with JWT authentication.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Node.js</span>
+          <span class="tech-tag">MongoDB</span>
+          <span class="tech-tag">Docker</span>
+          <span class="tech-tag">OpenAI API</span>
+        </div>
       </div>
 
-      <div class="project-item" style="margin-bottom: 2rem;">
-        <h3 style="color:var(--primary);">LinguaFusion: Multi-Source Linguistic Fusion for News Classification</h3>
-        <ul class="experience-list">
-          <li>Engineered a multi-dimensional linguistics-based feature representation system capturing syntactic, semantic, and contextual document characteristics</li>
-          <li>Implemented advanced NLP techniques including POS histograms, entity type fingerprinting, and embedding aggregation methods</li>
-          <li>Achieved a 3.32% accuracy improvement over industry-standard TF-IDF baselines on the 20 Newsgroups dataset</li>
-          <li>Maintained full interpretability and computational efficiency while approaching deep learning performance levels</li>
-          <li>Developed a modular pipeline architecture using scikit-learn, NLTK, and spaCy, enabling efficient feature experimentation</li>
-        </ul>
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">🧠</div>
+        </div>
+        <h3 class="project-title">LinguaFusion News Classifier</h3>
+        <p class="project-description">
+          Multi-dimensional linguistics-based feature representation system for document classification. 
+          Achieved 3.32% accuracy improvement over TF-IDF baselines while maintaining full interpretability.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">NLTK</span>
+          <span class="tech-tag">spaCy</span>
+          <span class="tech-tag">Scikit-learn</span>
+        </div>
       </div>
 
-      <div class="project-item" style="margin-bottom: 2rem;">
-        <h3 style="color:var(--primary);">Kaggle Data Science Competition: Loan Approval Prediction</h3>
-        <ul class="experience-list">
-          <li>Processed raw data for a credit risk prediction model, handling missing values, outliers, and applying feature encoding and scaling techniques. Designed advanced feature engineering, creating income-to-expense ratios and interaction terms, improving model accuracy by 15%</li>
-          <li>Built predictive models using LightGBM and CatBoost, optimizing hyper-parameters through grid search and random search techniques. Applied ensemble methods, including stacking and blending, to enhance model robustness and predictive power</li>
-          <li>Evaluated model performance using cross-validation and ROC-AUC metrics, ensuring consistency and generalization across datasets. Iteratively improved the model through feature selection and tuning, achieving a competitive position in the top 15% (Silver Award) of the Kaggle leaderboard</li>
-        </ul>
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">💳</div>
+        </div>
+        <h3 class="project-title">Loan Approval Prediction</h3>
+        <p class="project-description">
+          Kaggle competition solution using ensemble methods with LightGBM and CatBoost. 
+          Achieved top 15% ranking through advanced feature engineering and hyperparameter optimization.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">LightGBM</span>
+          <span class="tech-tag">CatBoost</span>
+          <span class="tech-tag">Feature Engineering</span>
+        </div>
       </div>
 
-      <div class="project-item" style="margin-bottom: 2rem;">
-        <h3 style="color:var(--primary);">Human vs. AI-Generated Text Detection: Veritas-AI</h3>
-        <ul class="experience-list">
-          <li>Designed and developed a robust AI text detection model with 99.77% accuracy, leveraging cloud-based frameworks to analyze linguistic patterns and distinguish between human and AI-generated content, thereby mitigating misinformation and enhancing content authenticity</li>
-          <li>Engineered custom pre-processing pipelines to tokenize, normalize, and embed text data, optimizing feature extraction for neural network compatibility and improving detection precision across diverse text inputs</li>
-          <li>Refined training algorithms by implementing dynamic learning rate adjustments and gradient clipping, reducing training times from 1361 seconds to 307 seconds per epoch and boosting model efficiency for real-time deployment</li>
-          <li>Integrated the detection model into a scalable cloud infrastructure using serverless architecture, ensuring seamless real-time content verification across platforms while maintaining high throughput and low latency</li>
-        </ul>
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">🔍</div>
+        </div>
+        <h3 class="project-title">Veritas-AI Text Detection</h3>
+        <p class="project-description">
+          AI text detection model with 99.77% accuracy for distinguishing human and AI-generated content. 
+          Optimized training time from 1361 to 307 seconds per epoch through algorithm refinement.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">Deep Learning</span>
+          <span class="tech-tag">NLP</span>
+          <span class="tech-tag">Cloud Infrastructure</span>
+        </div>
       </div>
-      <div class="project-item" style="margin-bottom: 2rem;">
-        <h3 style="color:var(--primary);">Automated Decision System Audit: Fairness in Comment Toxicity Classification</h3>
-        <ul class="experience-list">
-          <li>Conducted an in-depth audit of a comment toxicity classifier to identify and address demographic biases, utilizing advanced natural language processing models such as BERT, XLNet, and GPT to reduce unfairness by 25%</li>
-          <li>Designed and implemented custom pre-processing pipelines for text normalization and tokenization, improving the classifier's ability to handle diverse linguistic patterns and demographic variations</li>
-          <li>Developed and integrated sentiment analysis modules to enhance toxicity detection, enabling more accurate identification of harmful content and improving precision by 18% across various user groups</li>
-          <li>Fine-tuned model parameters and employed adversarial training techniques to ensure the classifier's robustness, achieving better generalization and fairer outcomes in toxicity classification</li>
-        </ul>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">⚖️</div>
+        </div>
+        <h3 class="project-title">Fairness in Toxicity Classification</h3>
+        <p class="project-description">
+          Conducted comprehensive audit of comment toxicity classifier to identify demographic biases. 
+          Reduced unfairness by 25% using BERT, XLNet, and GPT models with adversarial training.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">BERT</span>
+          <span class="tech-tag">XLNet</span>
+          <span class="tech-tag">GPT</span>
+          <span class="tech-tag">Fairness ML</span>
+        </div>
       </div>
-      <div class="project-item" style="margin-bottom: 2rem;">
-        <h3 style="color:var(--primary);">Applied Deep Learning: Chatbot Development</h3>
-        <ul class="experience-list">
-          <li>Designed and developed a multi-modal GenAI chatbot leveraging Vision Transformer, LSTM, and BioBERT models to automate lung health assessments, integrating advanced image and text analysis for accurate diagnoses</li>
-          <li>Engineered a custom image processing pipeline to analyze patient-uploaded lung images using Mean Linear Intercept techniques, enabling the chatbot to achieve 98% diagnostic accuracy in detecting pulmonary conditions</li>
-          <li>Implemented natural language understanding capabilities using BioBERT to interpret patient symptoms and medical histories, enhancing the chatbot's ability to provide personalized health recommendations</li>
-          <li>Optimized model integration and deployment within a cloud-based infrastructure, ensuring seamless interaction between image analysis and conversational AI components for real-time health assessments</li>
-        </ul>
+
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-icon">💬</div>
+        </div>
+        <h3 class="project-title">Medical Diagnosis Chatbot</h3>
+        <p class="project-description">
+          Multi-modal GenAI chatbot leveraging Vision Transformer and BioBERT for lung health assessments. 
+          Achieved 98% diagnostic accuracy through custom image processing pipeline.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">Vision Transformer</span>
+          <span class="tech-tag">BioBERT</span>
+          <span class="tech-tag">LSTM</span>
+          <span class="tech-tag">Medical AI</span>
+        </div>
       </div>
+    </div>
   </section>
 
-  <!-- CONTACT SECTION -->
+  <!-- CONTACT Section -->
   <section id="contact">
-    <h2 class="section-title"><span>04.</span> Contact</h2>
-    <p>
-      Interested in collaborating on cutting-edge AI/ML projects or have opportunities to discuss?
-      Reach out via <a href="mailto:ff26.veronica@gmail.com" style="color: var(--primary);">email</a>.
-    </p>
+    <div class="contact-container">
+      <h2 class="section-title" style="justify-content: center;"><span>04.</span> Get In Touch</h2>
+      <h3 class="contact-title">Let's Build Something Together</h3>
+      <p class="contact-text">
+        I'm actively looking for Summer 2026 internship opportunities in Data Science and Machine Learning Engineering. 
+        Whether you have an exciting opportunity, want to collaborate on a project, or just want to say hi, 
+        I'd love to hear from you!
+      </p>
+      <a href="mailto:veronicazhao@cmu.edu" class="btn btn-primary">Say Hello</a>
+    </div>
   </section>
 
-  <!-- SCROLL SCRIPT (Hide social links on scroll) -->
   <script>
-    window.addEventListener("scroll", function() {
-      const social = document.querySelector(".social-links");
-      if (window.scrollY > 50) {
-        social.style.opacity = "0";
+    // Cursor Effects
+    const cursor = document.querySelector('.cursor');
+    const follower = document.querySelector('.cursor-follower');
+    const links = document.querySelectorAll('a, button');
+
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      follower.style.left = e.clientX + 'px';
+      follower.style.top = e.clientY + 'px';
+    });
+
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        cursor.classList.add('hover');
+      });
+      link.addEventListener('mouseleave', () => {
+        cursor.classList.remove('hover');
+      });
+    });
+
+    // Hide/Show Navigation on Scroll
+    let lastScroll = 0;
+    const navbar = document.getElementById('navbar');
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll <= 0) {
+        navbar.classList.remove('hidden');
+      } else if (currentScroll > lastScroll && currentScroll > 100) {
+        navbar.classList.add('hidden');
       } else {
-        social.style.opacity = "1";
+        navbar.classList.remove('hidden');
       }
+      
+      lastScroll = currentScroll;
+    });
+
+    // Particle Background
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particlesArray = [];
+    const numberOfParticles = 50;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+        this.opacity = Math.random() * 0.5 + 0.2;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width || this.x < 0) {
+          this.speedX = -this.speedX;
+        }
+        if (this.y > canvas.height || this.y < 0) {
+          this.speedY = -this.speedY;
+        }
+      }
+
+      draw() {
+        ctx.fillStyle = `rgba(0, 255, 204, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particlesArray.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      // Draw connections
+      for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a + 1; b < particlesArray.length; b++) {
+          const dx = particlesArray[a].x - particlesArray[b].x;
+          const dy = particlesArray[a].y - particlesArray[b].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 100) {
+            ctx.strokeStyle = `rgba(0, 255, 204, ${0.1 * (1 - distance/100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+
+    // Resize canvas
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      particlesArray.length = 0;
+      init();
+    });
+
+    // Smooth scroll for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all animated elements
+    document.querySelectorAll('.section-title, .experience-card, .project-card, .profile-container, .skills-container, .contact-container').forEach(el => {
+      el.style.animationPlayState = 'paused';
+      observer.observe(el);
     });
   </script>
 </body>
